@@ -1,0 +1,251 @@
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-weight: 400;
+  src: url(1Ptgg87LROyAm0K0.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Graduate';
+  font-style: normal;
+  font-weight: 400;
+  src: url(C8cg4cs3o2n15t_2YxgR.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Press Start 2P';
+  font-style: normal;
+  font-weight: 400;
+  src: url(e3t4euO8T-267oIAQAu6jDQyK0nS.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Monoton';
+  font-style: normal;
+  font-weight: 400;
+  src: url(5h1aiZUrOngCibe4fkY.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Permanent Marker';
+  font-style: normal;
+  font-weight: 400;
+  src: url(Fh4uPib9Iyv2ucM6pGQMWimMp004Hao.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Bowlby One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(taiPGmVuC4y96PFeqp8smo4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Racing Sans One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(sykr-yRtm7EvTrXNxkv5jfKKyDCwLw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 400;
+  src: url(Yq6F-LOTXCb04q32xlpat-6uR42XTqtG6xjx040.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 700;
+  src: url(Yq6F-LOTXCb04q32xlpat-6uR42XTqtG6__2040.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 900;
+  src: url(Yq6F-LOTXCb04q32xlpat-6uR42XTqtG67H2040.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: normal;
+  src: url(k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTBjNp8A.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: expanded;
+  src: url(k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q8EsJaRE-NWIDdgffTTBjNp8A.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 800;
+  font-stretch: normal;
+  src: url(k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTtDRp8A.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 900;
+  font-stretch: normal;
+  src: url(k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTnTRp8A.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 900;
+  font-stretch: expanded;
+  src: url(k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q8EsJaRE-NWIDdgffTTnTRp8A.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Bagel Fat One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(hYkPPucsQOr5dy02WmQr5Zkd0B4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Rubik Mono One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(UqyJK8kPP3hjw6ANTdfRk9YSN-8w.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Climate Crisis';
+  font-style: normal;
+  font-weight: 400;
+  src: url(wEOpEB3AntNeKCPBVW9XOKlmp3AUgWFN1DvIvcM0gFp6jQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sixtyfour';
+  font-style: normal;
+  font-weight: 400;
+  src: url(OD5vuMCT1numDm3nakXtp2h4jg463t9haG_3mBkVsV20uFT3BAE5f73Y.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  src: url(jizHRFtNs2ka5fXjeivQ4LroWlx-6zATiw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  src: url(jizBRFtNs2ka5fXjeivQ4LroWlx-2zI.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Dela Gothic One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(hESp6XxvMDRA-2eD0lXpDa6QkBAGRQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Rampart One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(K2F1fZFGl_JSR1tAWNG9R6qg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Big Shoulders Display';
+  font-style: normal;
+  font-weight: 700;
+  src: url(fC1MPZJEZG-e9gHhdI4-NBbfd2ys3SjJCx12wPgf9g-_3F0YdWg8JF4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Big Shoulders Display';
+  font-style: normal;
+  font-weight: 900;
+  src: url(fC1MPZJEZG-e9gHhdI4-NBbfd2ys3SjJCx12wPgf9g-_3F0YdSY8JF4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Silkscreen';
+  font-style: normal;
+  font-weight: 400;
+  src: url(m8JXjfVPf62XiF7kO-i9ULQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Silkscreen';
+  font-style: normal;
+  font-weight: 700;
+  src: url(m8JUjfVPf62XiF7kO-i9aAhATms.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url(i7dPIFZifjKcF5UAWdDRUEY.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 700;
+  src: url(i7dMIFZifjKcF5UAWdDRaPpZYFI.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sedgwick Ave Display';
+  font-style: normal;
+  font-weight: 400;
+  src: url(xfuu0XPgU3jZPUoUo3ScvmPi-NapQ8OxM2cz.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Shrikhand';
+  font-style: normal;
+  font-weight: 400;
+  src: url(a8IbNovtLWfR7T7bMJwbBA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 500;
+  src: url(8vIS7w4qzmVxsWxjBZRjr0FKM_0KuT6k.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 800;
+  src: url(8vIS7w4qzmVxsWxjBZRjr0FKM_24vj6k.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Tilt Warp';
+  font-style: normal;
+  font-weight: 400;
+  src: url(AlZc_zVDs5XpmO7yn3w7flUoytXJp3z29uEwmEMLEJljLXvT8UJSZTBx.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Yellowtail';
+  font-style: normal;
+  font-weight: 400;
+  src: url(OZpGg_pnoDtINPfRIlLotlw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Caveat Brush';
+  font-style: normal;
+  font-weight: 400;
+  src: url(EYq0maZfwr9S9-ETZc3fKXtMWw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Bungee';
+  font-style: normal;
+  font-weight: 400;
+  src: url(N0bU2SZBIuF2PU_ECg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Bungee Shade';
+  font-style: normal;
+  font-weight: 400;
+  src: url(DtVkJxarWL0t2KdzK3oI_jks7g.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Righteous';
+  font-style: normal;
+  font-weight: 400;
+  src: url(1cXxaUPXBpj2rGoU7C9mjw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 500;
+  src: url(iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 900;
+  src: url(iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-ro-1UA.ttf) format('truetype');
+}
