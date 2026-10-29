@@ -1,0 +1,15 @@
+{
+  "id": "core-rn-hs-front-print-p01",
+  "title": "CORE- R/N H/S FRONT PRINT (1 TO 2 COL)",
+  "status": "Design proposal P01 — for approval, not for production",
+  "silhouette": "rn-hs",
+  "view": "front",
+  "items": [
+    { "ref": "P01-A", "colour": "BLACK", "hex": "#111111", "print": "level-up", "placement": "centre-chest" },
+    { "ref": "P01-B", "colour": "ROYAL BLUE", "hex": "#1F6FC0", "print": "rookie", "placement": "centre-chest" },
+    { "ref": "P01-C", "colour": "GREY MELANGE", "hex": "#C9CACC", "print": "off-the-grid", "placement": "centre-chest" },
+    { "ref": "P01-D", "colour": "RED", "hex": "#C8102E", "print": "fast-lane", "placement": "centre-chest" },
+    { "ref": "P01-E", "colour": "OLIVE", "hex": "#4D4A2A", "print": "explore-more", "placement": "centre-chest" },
+    { "ref": "P01-F", "colour": "NAVY", "hex": "#0E1638", "print": "no-limits", "placement": "centre-chest" }
+  ]
+}
