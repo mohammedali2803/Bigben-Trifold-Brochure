@@ -249,3 +249,27 @@
   font-weight: 900;
   src: url(iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-ro-1UA.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 800;
+  src: url(wXK0E3kTposypRydzVT08TS3JnAmtdiayqpv.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Yatra One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(C8ch4copsHzj8p7NaF0xww.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Rozha One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(AlZy_zVFtYP12Zncg2khdQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Teko';
+  font-style: normal;
+  font-weight: 600;
+  src: url(LYjYdG7kmE0gV69VVPPdFl06VN_JHLSy.ttf) format('truetype');
+}

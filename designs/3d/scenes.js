@@ -149,6 +149,27 @@ const SCENES = {
     return { scene, camera };
   },
 
+  // Two-line liquid-chrome bubble wordmark.
+  async nostress(renderer) {
+    const scene = new THREE.Scene();
+    scene.environment = chromeEnv(renderer);
+    const font = await loadFont('bagel');
+    const chrome = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 1, roughness: 0.04 });
+    const opts = { depth: 0.3, bevelThickness: 0.3, bevelSize: 0.12, bevelSegments: 20, curveSegments: 32 };
+    const top = textMesh(font, 'NO', chrome, opts);
+    const bottom = textMesh(font, 'STRESS', chrome, opts);
+    top.position.y = 0.62;
+    bottom.position.y = -0.62;
+    top.scale.setScalar(1.25);
+    const group = new THREE.Group().add(top, bottom);
+    group.rotation.set(-0.16, 0.2, -0.06);
+    scene.add(group);
+    const camera = new THREE.PerspectiveCamera(24, 1, 0.1, 100);
+    camera.position.set(0, 0.4, 8);
+    frame(camera, group, 0.97);
+    return { scene, camera };
+  },
+
   // Two glossy dice mid-roll.
   async dice(renderer) {
     const scene = new THREE.Scene();
