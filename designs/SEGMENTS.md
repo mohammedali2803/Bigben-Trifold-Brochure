@@ -1,6 +1,6 @@
 # Bigben design segments (from the founder)
 
-Every print brief names a gender and one or more age segments. Design for exactly those segments.
+Every print brief names a gender and one or more age segments. Design for exactly those segments. See `PRINT-PLAYBOOK.md` for print size, placement and catalogue structure taken from the founder's tech packs.
 
 ## Age segments
 
