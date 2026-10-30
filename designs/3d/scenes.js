@@ -170,6 +170,23 @@ const SCENES = {
     return { scene, camera };
   },
 
+  // Iridescent inflated wordmark.
+  async jugaad(renderer) {
+    const scene = new THREE.Scene();
+    scene.environment = chromeEnv(renderer);
+    const font = await loadFont('bagel');
+    const holo = new THREE.MeshPhysicalMaterial({
+      color: 0xffd6f5, metalness: 0.85, roughness: 0.06, iridescence: 1, iridescenceIOR: 1.8, iridescenceThicknessRange: [180, 900],
+    });
+    const mesh = textMesh(font, 'JUGAAD', holo, { depth: 0.32, bevelThickness: 0.3, bevelSize: 0.12, bevelSegments: 20, curveSegments: 32 });
+    mesh.rotation.set(-0.14, -0.22, 0.05);
+    scene.add(mesh);
+    const camera = new THREE.PerspectiveCamera(24, 1, 0.1, 100);
+    camera.position.set(0, 0.4, 8);
+    frame(camera, mesh, 0.97);
+    return { scene, camera };
+  },
+
   // Two glossy dice mid-roll.
   async dice(renderer) {
     const scene = new THREE.Scene();
