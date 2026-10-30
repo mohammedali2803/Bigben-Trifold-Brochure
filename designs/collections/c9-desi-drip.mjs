@@ -1,6 +1,6 @@
 // Collection 9 — DESI DRIP. Boys 30–36 (10–14 yrs), oversized funky streetwear for the
 // Indian market: small chest mark + full back. Mixes desi humour and Hindi lettering with
-// global streetwear treatments (3D chrome/holo type, album art, receipts, movie posters).
+// global streetwear treatments (3D chrome/holo type, puff lettering, receipts, movie posters).
 import { sparkle, star, r2 } from '../lib/svg.mjs';
 
 const INK = {
@@ -16,6 +16,7 @@ const INK = {
   lime: { name: 'Acid Lime', hex: '#C6FF3A' },
   orange: { name: 'Orange', hex: '#FF5A1F' },
   bubblegum: { name: 'Bubblegum', hex: '#FF7EB6' },
+  cocoa: { name: 'Cocoa', hex: '#3B2418' },
 };
 const FULL = { name: 'Full colour (DTF)', hex: 'conic-gradient(#00c2ff,#ff3da8,#ffe600,#00c2ff)' };
 const BACK = [300, 400];
@@ -98,7 +99,7 @@ const dhamaalBack = ({ id }) => {
   ${word(`fill="${yellow.hex}" stroke="${cream.hex}" stroke-width="3"`)}
   <text x="150" y="258" text-anchor="middle" ${XW} font-size="22" fill="${cream.hex}" letter-spacing="10">DHAMAAL</text>
   <text x="150" y="290" text-anchor="middle" font-family="Teko" font-weight="600" font-size="19" fill="${cream.hex}" ${fit(272)}>STARRING  YOU · YOUR FRIENDS · ONE CRICKET BALL</text>
-  <text x="150" y="312" text-anchor="middle" font-family="Teko" font-weight="600" font-size="19" fill="${cream.hex}" ${fit(272)}>DIRECTED BY  MUMMY · MUSIC BY  BEDROOM TAPES</text>
+  <text x="150" y="312" text-anchor="middle" font-family="Teko" font-weight="600" font-size="19" fill="${cream.hex}" ${fit(272)}>DIRECTED BY  MUMMY · CHAI BY  TAPRI CLUB</text>
   <text x="150" y="350" text-anchor="middle" font-family="Teko" font-weight="600" font-size="34" fill="${yellow.hex}" ${fit(260)}>IN CINEMAS THIS SUMMER</text>
   <text x="150" y="384" text-anchor="middle" font-family="Teko" font-weight="600" font-size="20" fill="${pink.hex}" letter-spacing="4">★★★★★  BLOCKBUSTER</text>`;
 };
@@ -121,38 +122,35 @@ const stressChest = ({ asset }) => `
   <path d="${TRIBAL}" transform="translate(150 150) scale(0.9) translate(-150 -146)" fill="${INK.lime.hex}"/>
   <image href="${asset('output/assets/3d/nostress.png')}" x="-30" y="-30" width="360" height="360"/>`;
 
-// 5. Bedroom Tapes Vol. 1 — album-cover cassette -----------------------------
-const bedroomBack = () => {
-  const { black, orange, blue } = INK;
-  const K = black.hex;
-  const tracks = [['HOMEWORK (SKIP)', '0:07'], ['SNACK RUN', '2:45'], ['ONE MORE GAME', '6:00:00'], ['MOM IS CALLING', '0:30'], ['FIVE MIN MORE', '∞']];
-  const reel = (x) => `<circle cx="${x}" cy="0" r="17" fill="none" stroke="${K}" stroke-width="3"/>${[0, 60, 120, 180, 240, 300].map((a) => `<path d="M${x},0 L${r2(x + 12 * Math.cos((a * Math.PI) / 180))},${r2(12 * Math.sin((a * Math.PI) / 180))}" stroke="${K}" stroke-width="3"/>`).join('')}`;
+// 10. Chai Break — puff bubble letters + cutting chai ------------------------
+const COCOA = '#3B2418';
+const puff = (txt, y, size, fill) => `
+  <text x="150" y="${y + 7}" text-anchor="middle" font-family="Bagel Fat One" font-size="${size}" fill="${COCOA}" stroke="${COCOA}" stroke-width="12" stroke-linejoin="round" ${fit(266)} transform="translate(5 0)">${txt}</text>
+  <text x="150" y="${y}" text-anchor="middle" font-family="Bagel Fat One" font-size="${size}" fill="${fill}" stroke="${COCOA}" stroke-width="10" stroke-linejoin="round" paint-order="stroke" ${fit(266)}>${txt}</text>`;
+const chaiBack = () => {
+  const { orange, bubblegum: pink } = INK;
   return `
-  <text x="12" y="70" ${XW} font-size="64" fill="${K}" ${fit()}>BEDROOM</text>
-  <text x="12" y="124" ${XW} font-size="64" fill="none" stroke="${K}" stroke-width="2" ${fit(196)}>TAPES</text>
-  <rect x="216" y="86" width="72" height="38" rx="19" fill="${orange.hex}"/><text x="252" y="111" text-anchor="middle" ${MONO} font-size="14" fill="${K}">VOL.1</text>
-  <g transform="translate(20 140)">
-    <rect x="0" y="0" width="260" height="140" rx="14" fill="none" stroke="${K}" stroke-width="4"/>
-    <rect x="16" y="14" width="228" height="80" rx="6" fill="${orange.hex}"/>
-    <rect x="16" y="14" width="228" height="18" fill="${blue.hex}"/>
-    <text x="26" y="28" ${MONO} font-size="11" fill="${K}">SIDE A</text><text x="234" y="28" text-anchor="end" ${MONO} font-size="11" fill="${K}">C-60</text>
-    <text x="130" y="60" text-anchor="middle" font-family="Caveat Brush" font-size="26" fill="${K}">mixtape 2026</text>
-    <rect x="62" y="64" width="136" height="26" rx="13" fill="#EFE8DA" stroke="${K}" stroke-width="2.5"/>
-    <g transform="translate(0 77)">${reel(88)}${reel(172)}</g>
-    <path d="M60,140 L76,112 L184,112 L200,140" fill="none" stroke="${K}" stroke-width="3"/>
-    ${[[12, 12], [248, 12], [12, 128], [248, 128]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3" fill="${K}"/>`).join('')}
+  <text x="150" y="24" text-anchor="middle" ${MONO} font-size="11" fill="${COCOA}" letter-spacing="3">★ TAPRI CLUB · OPEN 24/7 ★</text>
+  ${puff('CHAI', 132, 128, orange.hex)}
+  <g transform="translate(150 222)">
+    <path d="M-22,-54 q-8,-9 0,-18 M0,-54 q-8,-9 0,-18 M22,-54 q-8,-9 0,-18" fill="none" stroke="${pink.hex}" stroke-width="5" stroke-linecap="round"/>
+    <path d="M-36,-14 L36,-14 L30,48 L-30,48 Z" fill="${orange.hex}"/>
+    ${[-24, -12, 0, 12, 24].map((x) => `<path d="M${x},-40 L${x * 0.8},46" stroke="${COCOA}" stroke-width="2" opacity=".55"/>`).join('')}
+    <path d="M-36,-14 L36,-14" stroke="${COCOA}" stroke-width="3"/>
+    <path d="M-40,-46 L40,-46 L30,52 L-30,52 Z" fill="none" stroke="${COCOA}" stroke-width="5" stroke-linejoin="round"/>
   </g>
-  ${tracks.map(([t, d], i) => `
-    <text x="12" y="${306 + i * 18}" ${MONO} font-size="12" fill="${orange.hex}">0${i + 1}</text>
-    <text x="40" y="${306 + i * 18}" ${MONO} font-size="12" fill="${K}">${t}</text>
-    <text x="288" y="${306 + i * 18}" text-anchor="end" ${MONO} font-size="12" fill="${blue.hex}">${d}</text>`).join('')}
-  <text x="150" y="396" text-anchor="middle" ${MONO} font-size="9" fill="${K}" letter-spacing="3">℗ BEDROOM RECORDS · STEREO</text>`;
+  <g transform="translate(236 204) rotate(12)">
+    <circle r="30" fill="${pink.hex}" stroke="${COCOA}" stroke-width="3.5"/>
+    <text y="-3" text-anchor="middle" ${MONO} font-size="10" fill="${COCOA}">100%</text>
+    <text y="12" text-anchor="middle" font-family="Bagel Fat One" font-size="14" fill="${COCOA}">KADAK</text>
+  </g>
+  ${[[52, 194, 12, orange.hex], [64, 248, 7, pink.hex], [262, 270, 9, orange.hex]].map(([x, y, r, f]) => `<path d="${sparkle(x, y, r)}" fill="${f}" stroke="${COCOA}" stroke-width="2"/>`).join('')}
+  ${puff('BREAK', 336, 92, pink.hex)}
+  <text x="150" y="386" text-anchor="middle" font-family="Instrument Serif" font-style="italic" font-size="22" fill="${COCOA}">ek cutting, full vibes.</text>`;
 };
-const bedroomChest = () => `
-  <rect x="40" y="70" width="220" height="118" rx="14" fill="none" stroke="${INK.black.hex}" stroke-width="7"/>
-  <rect x="62" y="90" width="176" height="44" rx="6" fill="${INK.orange.hex}"/>
-  ${[106, 194].map((x) => `<circle cx="${x}" cy="158" r="14" fill="none" stroke="${INK.black.hex}" stroke-width="6"/>`).join('')}
-  <text x="150" y="250" text-anchor="middle" ${XW} font-size="34" fill="${INK.black.hex}" ${fit(240)}>BEDROOM TAPES</text>`;
+const chaiChest = () => `
+  <text x="150" y="186" text-anchor="middle" font-family="Bagel Fat One" font-size="118" fill="${INK.orange.hex}" stroke="${COCOA}" stroke-width="12" stroke-linejoin="round" paint-order="stroke" ${fit(250)}>CHAI</text>
+  <text x="150" y="250" text-anchor="middle" ${MONO} font-size="16" fill="${COCOA}" letter-spacing="5">TAPRI CLUB</text>`;
 
 // 6. Bindaas — Hindi puff lettering ------------------------------------------
 const bindaasBack = ({ id }) => {
@@ -185,7 +183,7 @@ export default {
   countInks: true,
   items: [
     item('DD-04', 'No Stress', { name: 'Navy', hex: '#1C2340' }, stressChest, stressBack, [FULL], [FULL]),
-    item('DD-05', 'Bedroom Tapes', { name: 'Off White', hex: '#EFE8DA' }, bedroomChest, bedroomBack, [INK.black, INK.orange], [INK.black, INK.orange, INK.blue]),
+    item('DD-10', 'Chai Break', { name: 'Off White', hex: '#EFE8DA' }, chaiChest, chaiBack, [INK.orange, INK.cocoa], [INK.cocoa, INK.orange, INK.bubblegum]),
     item('DD-06', 'Bindaas', { name: 'Coffee', hex: '#4A3428' }, bindaasChest, bindaasBack, [INK.lime, INK.cream], [INK.lime, INK.bubblegum, INK.cream]),
     item('DD-07', 'Jugaad', { name: 'Black', hex: '#141414' }, jugaadChest, jugaadBack, [FULL], [FULL]),
     item('DD-08', 'Snack Run', { name: 'Sand', hex: '#C9B88E' }, snackChest, snackBack, [INK.red], [INK.cream, INK.black, INK.red]),
