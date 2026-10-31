@@ -57,7 +57,7 @@ function inkList(item, collection) {
     .map(
       (g) => `<div class="inks">${g.label ? `<b>${g.label}</b>` : ''}${g.inks
         .map((ink) => `<i style="background:${ink.hex}" title="${ink.name}"></i><em>${ink.name}</em>`)
-        .join('')}${collection.countInks ? `<strong>${g.inks.length} COL</strong>` : ''}</div>`,
+        .join('')}${collection.countInks ? `<strong>${g.inks.some((i) => i.name.startsWith('Full colour')) ? 'DTF' : `${g.inks.length} COL`}</strong>` : ''}</div>`,
     )
     .join('');
 }

@@ -28,7 +28,7 @@ The summer program is **one drop**. Every catalogue gets its own theme, and no m
 
 | # | Line · style · sizes | Theme | Status |
 |---|---|---|---|
-| 1 | Core · R/N H/S · Kids 16–20 | **Toy Box**: toy vehicles, blocks, wind-up robot | C10 proposal |
+| 1 | Core · R/N H/S · Kids 16–20 | **Toy Box**: realistic 3D toys + Block Party | C10 v2 proposal |
 | 2 | Core · R/N H/S · Junior 22–28 | **Summer Camp**: tents, compass, bugs, campfire, binoculars | |
 | 3 | Core · R/N H/S · Boys 30–36 | **Summer League**: sports type, ball sports, scoreboards | |
 | 4 | Core · Collar H/S · Kids 16–20 | **Seaside placements**: crabs, boats, beach pails along the hem | |
@@ -59,6 +59,7 @@ The summer program is **one drop**. Every catalogue gets its own theme, and no m
 
 ## Motif register (already used — do not repeat in the summer drop)
 
-- **C10 Toy Box:** toy dump truck, toy train, ABC/123 blocks and stacking rings, propeller plane, ice-cream van and cones, wind-up robot.
+- **C10 Toy Box v2:** toy fire truck, rubber duck in swim ring, ABC/123 blocks and stacking rings, watermelon ice lolly, toy race car Nº 7, hot-air balloon. (v1 dropped: dump truck, train, plane, ice-cream van, wind-up robot.)
+- **Founder's existing tech packs (avoid repeating):** excavator / construction, school bus, banana with sunglasses, instant camera, pixel robot, lion, dino on skateboard, octopus captain, astronaut kid, 'Hero' brush type, backpack straps.
 - **C9 Desi Drip (approved):** liquid-chrome "No Stress", Tapri Club / Chai Break, Bindaas (Hindi puff), Jugaad (holo 3D + stickers), Snack Run kirana bill, Dhamaal Bollywood poster.
 - **Earlier proposals C1–C8** (not in the drop unless picked): Side Quest map, light bulb, daisy smiley, wavy type, starburst, retro TV; Bauhaus shapes, space club rocket and planet, dino, sticker bomb, fruit, skateboard; 3D play / future / dice / rocket / shapes; out of office, BMX, topo trail, cloud, sun, pixel controller; moon, academy crest, mushrooms, volt, tennis, wave; AOP checks, stars, footprints, orbit, cherries; skate bear, game controller, astronaut, shark, robot, basketball; race bib, bubble letters, racing 35, graffiti, varsity 23, Swiss poster.

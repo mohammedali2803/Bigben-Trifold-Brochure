@@ -105,6 +105,24 @@ function textMesh(font, text, material, opts) {
   return new THREE.Mesh(geo, material);
 }
 
+
+// Studio setup shared by the summer toy renders.
+const metal = (color) => new THREE.MeshPhysicalMaterial({ color, metalness: 1, roughness: 0.18 });
+const matte = (color) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.75 });
+function toyStage(renderer) {
+  const scene = new THREE.Scene();
+  scene.environment = studioEnv(renderer);
+  const key = new THREE.DirectionalLight(0xffffff, 1.5); key.position.set(-4, 6, 6); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(5, 3, -4); scene.add(rim);
+  return scene;
+}
+function shot(scene, object, from, fill) {
+  const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
+  camera.position.set(...from);
+  frame(camera, object, fill);
+  return { scene, camera };
+}
+
 const SCENES = {
   // Inflated, candy-gloss bubble letters.
   async play(renderer) {
@@ -185,6 +203,143 @@ const SCENES = {
     camera.position.set(0, 0.4, 8);
     frame(camera, mesh, 0.97);
     return { scene, camera };
+  },
+
+  // --- Summer kids: realistic toy renders -------------------------------------
+  async firetruck(renderer) {
+    const scene = toyStage(renderer);
+    const red = glossy(0xe8322a), white = glossy(0xf7f4ee), steel = metal(0xc9ced6), rubber = matte(0x23252b);
+    const g = new THREE.Group();
+    const box = (w, h, d, r, mat, x, y, z) => { const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 6, r), mat); m.position.set(x, y, z); g.add(m); return m; };
+    box(3.5, 0.42, 1.36, 0.12, rubber, 0, 0.62, 0);
+    box(2.15, 1.0, 1.42, 0.16, red, -0.62, 1.28, 0);
+    box(1.2, 1.25, 1.42, 0.22, red, 1.08, 1.4, 0);
+    box(0.08, 0.5, 1.12, 0.03, glossy(0x8fd3ff, { roughness: 0.04 }), 1.68, 1.62, 0);
+    box(0.62, 0.46, 0.06, 0.03, glossy(0x8fd3ff, { roughness: 0.04 }), 1.12, 1.66, 0.72);
+    box(2.1, 0.12, 0.04, 0.02, white, -0.62, 1.12, 0.72);
+    box(1.15, 0.12, 0.04, 0.02, white, 1.08, 1.12, 0.72);
+    [-1.25, -0.62, 0].forEach((x) => box(0.5, 0.56, 0.05, 0.04, steel, x, 1.38, 0.72));
+    box(0.12, 0.3, 1.5, 0.05, steel, 1.74, 0.78, 0);
+    [0.42, -0.42].forEach((z) => { const l = box(0.22, 0.16, 0.16, 0.06, glossy(0xffe066, { emissive: 0xffd23f, emissiveIntensity: 0.4 }), 1.72, 1.02, z); });
+    box(0.36, 0.16, 0.26, 0.07, glossy(0xff3b3b, { emissive: 0xff2020, emissiveIntensity: 0.5 }), 0.92, 2.1, -0.28);
+    box(0.36, 0.16, 0.26, 0.07, glossy(0x3b7bff, { emissive: 0x2050ff, emissiveIntensity: 0.5 }), 0.92, 2.1, 0.28);
+    const ladder = new THREE.Group();
+    [-0.32, 0.32].forEach((z) => { const r = new THREE.Mesh(new RoundedBoxGeometry(2.9, 0.09, 0.09, 4, 0.03), steel); r.position.set(0, 0, z); ladder.add(r); });
+    for (let i = 0; i < 11; i++) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.64, 12), steel); c.rotation.x = Math.PI / 2; c.position.set(-1.35 + i * 0.27, 0, 0); ladder.add(c); }
+    ladder.position.set(-0.5, 1.95, 0); ladder.rotation.z = 0.14; g.add(ladder);
+    const reel = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.08, 16, 40), glossy(0xffd23f)); reel.position.set(-1.25, 1.38, 0.78); g.add(reel);
+    [[-1.15, 0.7], [-1.15, -0.7], [1.15, 0.7], [1.15, -0.7]].forEach(([x, z]) => {
+      const t = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.32, 40), rubber); t.rotation.x = Math.PI / 2; t.position.set(x, 0.42, z); g.add(t);
+      const h = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.34, 32), steel); h.rotation.x = Math.PI / 2; h.position.set(x, 0.42, z); g.add(h);
+    });
+    scene.add(g);
+    return shot(scene, g, [4.2, 2.4, 6.4], 0.92);
+  },
+
+  async duck(renderer) {
+    const scene = toyStage(renderer);
+    const yellow = glossy(0xffcf1f), orange = glossy(0xff8a1f), black = glossy(0x111111, { roughness: 0.1 });
+    const g = new THREE.Group();
+    const ell = (r, sx, sy, sz, mat, x, y, z) => { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 64, 48), mat); m.scale.set(sx, sy, sz); m.position.set(x, y, z); g.add(m); return m; };
+    ell(1, 1.3, 0.92, 1.0, yellow, 0, 0, 0);
+    const tail = new THREE.Mesh(new THREE.ConeGeometry(0.34, 0.7, 32), yellow); tail.position.set(-1.25, 0.45, 0); tail.rotation.z = 0.9; g.add(tail);
+    ell(0.66, 1, 1, 1, yellow, 0.62, 1.02, 0);
+    ell(0.34, 1.25, 0.42, 1.0, orange, 1.2, 0.92, 0);
+    ell(0.3, 1.1, 0.3, 0.9, orange, 1.12, 0.78, 0);
+    [0.3, -0.3].forEach((z) => { ell(0.1, 1, 1.2, 1, black, 0.98, 1.2, z); ell(0.035, 1, 1, 1, glossy(0xffffff), 1.06, 1.27, z * 1.1); });
+    ell(0.5, 1.3, 0.55, 0.3, glossy(0xffc000), -0.15, 0.15, 0.86).rotation.z = -0.25;
+    const stripes = document.createElement('canvas'); stripes.width = 512; stripes.height = 8;
+    const sc = stripes.getContext('2d'); for (let i = 0; i < 8; i++) { sc.fillStyle = i % 2 ? '#ffffff' : '#ff3b4f'; sc.fillRect(i * 64, 0, 64, 8); }
+    const tex = new THREE.CanvasTexture(stripes); tex.colorSpace = THREE.SRGBColorSpace;
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.32, 0.36, 48, 128), new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.2, clearcoat: 1 }));
+    ring.rotation.x = Math.PI / 2 - 0.08; ring.position.y = -0.42; g.add(ring);
+    [[1.9, -0.3, 0.6, 0.12], [2.15, 0.1, 0.3, 0.08], [-1.9, -0.2, 0.5, 0.1], [-2.1, 0.25, 0.2, 0.07]].forEach(([x, y, z, r]) => ell(r, 1, 1.25, 1, glossy(0x7cc8ff, { roughness: 0.03, transmission: 0.3 }), x, y, z));
+    g.rotation.y = -0.45;
+    scene.add(g);
+    return shot(scene, g, [0.6, 1.6, 7], 0.9);
+  },
+
+  async lolly(renderer) {
+    const scene = toyStage(renderer);
+    const shape = new THREE.Shape();
+    shape.moveTo(-0.62, -1.1); shape.lineTo(0.62, -1.1); shape.lineTo(0.62, 0.9);
+    shape.absarc(0.62, 1.32, 0.42, -Math.PI / 2, -Math.PI, true);
+    shape.lineTo(-0.3, 1.32); shape.quadraticCurveTo(-0.62, 1.32, -0.62, 1.0); shape.lineTo(-0.62, -1.1);
+    const geo = new THREE.ExtrudeGeometry(shape, { depth: 0.32, bevelEnabled: true, bevelThickness: 0.14, bevelSize: 0.12, bevelSegments: 12, curveSegments: 48 });
+    geo.translate(0, 0, -0.16);
+    const pos = geo.attributes.position, col = [];
+    const red = new THREE.Color(0xff3d57), white = new THREE.Color(0xfff6ea), green = new THREE.Color(0x2fbf5b);
+    for (let i = 0; i < pos.count; i++) { const y = pos.getY(i); const c = y > -0.62 ? red : y > -0.78 ? white : green; col.push(c.r, c.g, c.b); }
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+    const g = new THREE.Group();
+    g.add(new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.05 })));
+    [[-0.3, 0.6], [0.05, 0.25], [0.35, 0.5], [-0.2, -0.05], [0.3, -0.2], [-0.4, 0.15], [0.05, 0.85], [0.0, -0.4]].forEach(([x, y], i) => {
+      const s = new THREE.Mesh(new THREE.SphereGeometry(0.06, 24, 16), glossy(0x1b1b1b)); s.scale.set(0.8, 1.4, 0.5); s.position.set(x, y, 0.3); s.rotation.z = (i % 3 - 1) * 0.4; g.add(s);
+    });
+    const stick = new THREE.Mesh(new RoundedBoxGeometry(0.32, 1.3, 0.12, 6, 0.06), matte(0xe0b67a)); stick.position.set(0, -1.75, 0); g.add(stick);
+    [[-0.45, -1.32, 0.13], [0.3, -1.38, 0.1], [0.55, -1.25, 0.08]].forEach(([x, y, r]) => { const d = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 24), glossy(0x2fbf5b)); d.scale.set(1, 1.5, 1); d.position.set(x, y, 0.12); g.add(d); });
+    g.rotation.set(0.05, -0.35, -0.22);
+    scene.add(g);
+    return shot(scene, g, [0.4, 0.2, 7], 0.92);
+  },
+
+  async racecar(renderer) {
+    const scene = toyStage(renderer);
+    const blue = glossy(0x1f6bff), white = glossy(0xffffff), rubber = matte(0x1e1f24), steel = metal(0xd6dbe2);
+    const side = new THREE.Shape();
+    side.moveTo(-1.9, 0.25); side.lineTo(1.75, 0.25); side.quadraticCurveTo(2.05, 0.3, 1.95, 0.55);
+    side.lineTo(0.75, 0.78); side.quadraticCurveTo(0.35, 1.25, -0.35, 1.2); side.quadraticCurveTo(-0.85, 1.15, -1.1, 0.86);
+    side.lineTo(-1.85, 0.86); side.quadraticCurveTo(-2.0, 0.6, -1.9, 0.25);
+    const body = new THREE.ExtrudeGeometry(side, { depth: 1.0, bevelEnabled: true, bevelThickness: 0.22, bevelSize: 0.16, bevelSegments: 12, curveSegments: 32 });
+    body.translate(0, 0, -0.5);
+    const g = new THREE.Group();
+    g.add(new THREE.Mesh(body, blue));
+    const glass = new THREE.Mesh(new THREE.SphereGeometry(0.62, 48, 32, 0, Math.PI * 2, 0, Math.PI / 2), glossy(0x1a2a44, { roughness: 0.03, metalness: 0.3 }));
+    glass.scale.set(1.15, 0.62, 0.95); glass.position.set(-0.15, 0.98, 0); g.add(glass);
+    [0.22, -0.22].forEach((z) => { const st = new THREE.Mesh(new RoundedBoxGeometry(3.0, 0.03, 0.14, 2, 0.01), white); st.position.set(0.25, 0.9 + 0.02, z); st.rotation.z = -0.08; g.add(st); });
+    const spoiler = new THREE.Mesh(new RoundedBoxGeometry(0.42, 0.08, 1.7, 4, 0.03), white); spoiler.position.set(-1.85, 1.22, 0); g.add(spoiler);
+    [0.5, -0.5].forEach((z) => { const p = new THREE.Mesh(new RoundedBoxGeometry(0.08, 0.36, 0.08, 2, 0.02), white); p.position.set(-1.8, 1.02, z); g.add(p); });
+    const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.04, 48), white); disc.rotation.x = Math.PI / 2; disc.position.set(-0.05, 0.6, 0.73); g.add(disc);
+    const font = await loadFont('bagel');
+    const num = textMesh(font, '7', glossy(0x111111), { size: 0.5, depth: 0.04, bevelThickness: 0.01, bevelSize: 0.01, bevelSegments: 2 });
+    num.position.set(-0.05, 0.6, 0.77); g.add(num);
+    [[1.25, 0.62], [1.25, -0.62], [-1.2, 0.62], [-1.2, -0.62]].forEach(([x, z]) => {
+      const r = x < 0 ? 0.46 : 0.4;
+      const t = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.42, 48), rubber); t.rotation.x = Math.PI / 2; t.position.set(x, r - 0.02, z); g.add(t);
+      const h = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.55, r * 0.55, 0.44, 32), steel); h.rotation.x = Math.PI / 2; h.position.set(x, r - 0.02, z); g.add(h);
+    });
+    scene.add(g);
+    return shot(scene, g, [3.6, 1.6, 6.2], 0.94);
+  },
+
+  async balloon(renderer) {
+    const scene = toyStage(renderer);
+    const prof = [[0.001, -1.2], [0.42, -1.05], [0.95, -0.4], [1.28, 0.35], [1.32, 0.9], [1.12, 1.5], [0.7, 1.92], [0.001, 2.08]].map(([r, y]) => new THREE.Vector2(r, y));
+    const curve = new THREE.SplineCurve(prof);
+    let geo = new THREE.LatheGeometry(curve.getPoints(80), 96).toNonIndexed();
+    const palette = [0xff3b4f, 0xffd23f, 0x2fb6ff, 0xffffff].map((c) => new THREE.Color(c));
+    const pos = geo.attributes.position, col = [];
+    for (let i = 0; i < pos.count; i += 3) {
+      const cx = (pos.getX(i) + pos.getX(i + 1) + pos.getX(i + 2)) / 3, cz = (pos.getZ(i) + pos.getZ(i + 1) + pos.getZ(i + 2)) / 3;
+      const k = Math.floor(((Math.atan2(cz, cx) + Math.PI) / (Math.PI * 2)) * 12) % 4;
+      for (let j = 0; j < 3; j++) col.push(palette[k].r, palette[k].g, palette[k].b);
+    }
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+    geo.computeVertexNormals();
+    const g = new THREE.Group();
+    g.add(new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: 0.35, clearcoat: 0.6, side: THREE.DoubleSide })));
+    const basket = new THREE.Mesh(new RoundedBoxGeometry(0.62, 0.42, 0.62, 6, 0.08), matte(0xb07a45)); basket.position.y = -1.9; g.add(basket);
+    const rim = new THREE.Mesh(new RoundedBoxGeometry(0.68, 0.08, 0.68, 4, 0.03), matte(0x7a4d26)); rim.position.y = -1.68; g.add(rim);
+    [[0.28, 0.28], [-0.28, 0.28], [0.28, -0.28], [-0.28, -0.28]].forEach(([x, z]) => {
+      const a = new THREE.Vector3(x, -1.68, z), b = new THREE.Vector3(x * 1.4, -1.12, z * 1.4);
+      const len = a.distanceTo(b); const r = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, len, 6), matte(0x5a3a20));
+      r.position.copy(a.clone().add(b).multiplyScalar(0.5)); r.lookAt(b); r.rotateX(Math.PI / 2); g.add(r);
+    });
+    const cloud = (x, y, z, s) => { [[0, 0, 0.5], [0.45, 0.12, 0.42], [-0.45, 0.08, 0.38], [0.18, 0.32, 0.36], [-0.2, 0.28, 0.34]].forEach(([dx, dy, r]) => { const c = new THREE.Mesh(new THREE.SphereGeometry(r * s, 48, 32), matte(0xffffff)); c.position.set(x + dx * s, y + dy * s, z); g.add(c); }); };
+    cloud(-1.6, -1.95, 0.4, 0.9); cloud(1.55, -1.5, -0.2, 0.75);
+    g.rotation.y = 0.3;
+    scene.add(g);
+    return shot(scene, g, [0, 0.2, 9], 0.95);
   },
 
   // Two glossy dice mid-roll.

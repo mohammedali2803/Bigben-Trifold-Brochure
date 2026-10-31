@@ -4,8 +4,8 @@ import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { ROOT, openBrowser } from './lib/render.mjs';
 
-const SCENES = ['play', 'future', 'nostress', 'jugaad', 'dice', 'rocket', 'shapes', 'planet', 'nebula'];
-const SIZE = 2000;
+const SCENES = ['play', 'future', 'nostress', 'jugaad', 'firetruck', 'duck', 'lolly', 'racecar', 'balloon', 'dice', 'rocket', 'shapes', 'planet', 'nebula'];
+const SIZE = Number(process.env.SIZE ?? 2000);
 const out = path.join(ROOT, 'output', 'assets', '3d');
 mkdirSync(out, { recursive: true });
 

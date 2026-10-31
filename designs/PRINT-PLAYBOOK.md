@@ -84,3 +84,15 @@ Several tech packs use protected names or characters. These are a legal risk on 
 - **Games:** Sonic, Minecraft (0856 J/B, 0862 B); Astro Bot and the PlayStation logo (0858 K)
 - **Fashion brands:** Stüssy logo (0859 J); "Balenciaga" parody (0821 B)
 - **Smiley faces:** designs close to the Smiley Company's smiley (0838 B, 0854 J, 0903 K)
+
+## 7. Founder's finish standard (applies to every catalogue)
+
+- **Realistic and finished, never hand-drawn.** Reference packs: 0951 K, 0822 K and the Core R/N H/S embroidery sheet. Their prints have real shading, highlights, textures and depth.
+- **Avoid:** thick wobbly cartoon outlines, doodle-style flat cartoons.
+- **Use:**
+  - 3D-rendered toys and objects (`3d/scenes.js`)
+  - clean dimensional vector work (Block Party)
+  - painted-brush or polished type
+  - realistic textures
+- Objects and vehicles render best. Furry or expressive characters (lion, octopus) need an illustrator or licensed artwork.
+- Realistic prints go to DTF / digital print. A 4-ink version needs index separation; check with the printer.
