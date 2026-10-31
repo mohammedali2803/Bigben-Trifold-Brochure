@@ -17,10 +17,14 @@ function artBody(item, side, ctx) {
   return art.svg({ id, asset: (p) => `${ctx.base}/${p}`, colour: item.colour });
 }
 
+// Optional placement guide (e.g. a garment-front outline) drawn under the artwork
+// in previews and sheets only, never in the production PNG.
+const guide = (item, side) => item.art[side].guide?.(item.colour.hex) ?? '';
+
 function inlineSvg(item, side, ctx, attrs = '') {
   const art = item.art[side];
   const [w, h] = art.size ?? [300, 300];
-  return `<svg viewBox="0 0 ${w} ${h}" ${attrs}>${artBody(item, side, ctx)}</svg>`;
+  return `<svg viewBox="0 0 ${w} ${h}" ${attrs}>${guide(item, side)}${artBody(item, side, ctx)}</svg>`;
 }
 
 function aopTile(item, ctx, w, h) {
@@ -36,7 +40,7 @@ function aopTile(item, ctx, w, h) {
 function tileVisual(collection, item, ctx) {
   if (collection.layout === 'aop') return `<div class="swatch">${aopTile(item, ctx, 475, 370)}</div>`;
   if (collection.layout === 'single')
-    return `<div class="swatch"><div class="art single">${inlineSvg(item, 'front', ctx)}</div></div>`;
+    return `<div class="swatch"><div class="art single" style="aspect-ratio:${(item.art.front.size ?? [1, 1]).join('/')}">${inlineSvg(item, 'front', ctx)}</div></div>`;
   const [a, b] = collection.layout === 'front-back' ? ['front', 'back'] : ['chest', 'back'];
   return `<div class="swatch split">
     <div class="panel ${a}"><span>${SIDE_LABEL[a]}</span><div class="art">${inlineSvg(item, a, ctx)}</div></div>
@@ -125,7 +129,7 @@ async function buildCollection(ctx, collection) {
       const preview =
         side === 'tile'
           ? { w: w * 3, h: h * 3, body: `<rect width="${w * 3}" height="${h * 3}" fill="${item.colour.hex}"/>${[0, 1, 2].flatMap((i) => [0, 1, 2].map((j) => `<g transform="translate(${i * w} ${j * h})">${body}</g>`)).join('')}` }
-          : { w: w * 1.24, h: h + w * 0.24, body: `<rect width="${w * 1.24}" height="${h + w * 0.24}" fill="${item.colour.hex}"/><g transform="translate(${w * 0.12} ${w * 0.12})">${body}</g>` };
+          : { w: w * 1.24, h: h + w * 0.24, body: `<rect width="${w * 1.24}" height="${h + w * 0.24}" fill="${item.colour.hex}"/><g transform="translate(${w * 0.12} ${w * 0.12})">${guide(item, side)}${body}</g>` };
       await svgToPng(ctx, preview, path.join(dir, 'prints', `${name}-preview.png`), 1400);
     }
   }
