@@ -342,6 +342,49 @@ const SCENES = {
     return shot(scene, g, [0, 0.2, 9], 0.95);
   },
 
+  async whale(renderer) {
+    const scene = toyStage(renderer);
+    const blue = glossy(0x2f7bff), belly = glossy(0xe4f4ff), water = glossy(0x8fd8ff, { roughness: 0.03 });
+    const g = new THREE.Group();
+    const ell = (r, sx, sy, sz, mat, x, y, z, rz = 0) => { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 64, 48), mat); m.scale.set(sx, sy, sz); m.position.set(x, y, z); m.rotation.z = rz; g.add(m); return m; };
+    ell(1, 1.55, 0.95, 1.0, blue, 0, 0, 0);
+    ell(1, 1.35, 0.6, 0.86, belly, 0.12, -0.42, 0.06);
+    ell(0.5, 1.4, 0.55, 0.6, blue, -1.55, 0.18, 0, 0.35);
+    ell(0.42, 1.2, 0.28, 0.75, blue, -2.05, 0.55, 0.32, 0.7);
+    ell(0.42, 1.2, 0.28, 0.75, blue, -2.05, 0.55, -0.32, 0.7);
+    ell(0.34, 1.3, 0.3, 0.8, blue, 0.35, -0.5, 0.92, -0.5);
+    ell(0.11, 1, 1.15, 0.6, glossy(0x111111, { roughness: 0.08 }), 1.05, 0.18, 0.72);
+    ell(0.035, 1, 1, 1, glossy(0xffffff), 1.09, 0.24, 0.79);
+    [[0.6, 1.0, 0.16], [0.6, 1.35, 0.14], [0.45, 1.65, 0.12], [0.8, 1.62, 0.12], [0.3, 1.9, 0.1], [0.95, 1.9, 0.1], [0.62, 1.95, 0.11]].forEach(([x, y, r]) => ell(r, 1, 1.15, 1, water, x, y, 0.1));
+    g.rotation.set(0.05, -0.35, 0.06);
+    scene.add(g);
+    return shot(scene, g, [0.5, 0.8, 8], 0.92);
+  },
+
+  async yay(renderer) {
+    const scene = toyStage(renderer);
+    const font = await loadFont('bagel');
+    const colours = [0xff5fa2, 0xffc23d, 0x3fa9ff, 0x3fd69a];
+    const group = new THREE.Group();
+    let x = 0;
+    const tilt = [[0.1, -0.2, 0.05], [-0.08, 0.15, -0.06], [0.06, -0.12, 0.08], [-0.05, 0.2, -0.1]];
+    'YAY!'.split('').forEach((ch, i) => {
+      const foil = new THREE.MeshPhysicalMaterial({ color: colours[i], metalness: 0.35, roughness: 0.14, clearcoat: 1, clearcoatRoughness: 0.05, iridescence: 0.4 });
+      const m = textMesh(font, ch, foil, { depth: 0.4, bevelThickness: 0.34, bevelSize: 0.16, bevelSegments: 20, curveSegments: 32 });
+      const w = m.geometry.boundingBox.max.x - m.geometry.boundingBox.min.x;
+      m.position.set(x + w / 2, i % 2 ? 0.14 : -0.06, 0);
+      m.rotation.set(...tilt[i]);
+      x += w + 0.06;
+      group.add(m);
+    });
+    group.position.x = -x / 2;
+    scene.add(group);
+    const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
+    camera.position.set(0.3, -0.4, 8);
+    frame(camera, group, 0.95);
+    return { scene, camera };
+  },
+
   // Two glossy dice mid-roll.
   async dice(renderer) {
     const scene = new THREE.Scene();

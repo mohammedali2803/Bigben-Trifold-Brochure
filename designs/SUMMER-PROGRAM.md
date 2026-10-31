@@ -59,7 +59,12 @@ The summer program is **one drop**. Every catalogue gets its own theme, and no m
 
 ## Motif register (already used — do not repeat in the summer drop)
 
-- **C10 Toy Box v2:** toy fire truck, rubber duck in swim ring, ABC/123 blocks and stacking rings, watermelon ice lolly, toy race car Nº 7, hot-air balloon. (v1 dropped: dump truck, train, plane, ice-cream van, wind-up robot.)
+- **C10 Toy Box v3:** foil-balloon YAY!, rubber duck Pool Party, ABC/123 blocks, watermelon ice lolly, toy whale Splash, dimensional PLAY letters at hem.
+- **Rendered but unused (free for later catalogues):** toy fire truck, race car Nº 7, hot-air balloon.
 - **Founder's existing tech packs (avoid repeating):** excavator / construction, school bus, banana with sunglasses, instant camera, pixel robot, lion, dino on skateboard, octopus captain, astronaut kid, 'Hero' brush type, backpack straps.
 - **C9 Desi Drip (approved):** liquid-chrome "No Stress", Tapri Club / Chai Break, Bindaas (Hindi puff), Jugaad (holo 3D + stickers), Snack Run kirana bill, Dhamaal Bollywood poster.
 - **Earlier proposals C1–C8** (not in the drop unless picked): Side Quest map, light bulb, daisy smiley, wavy type, starburst, retro TV; Bauhaus shapes, space club rocket and planet, dino, sticker bomb, fruit, skateboard; 3D play / future / dice / rocket / shapes; out of office, BMX, topo trail, cloud, sun, pixel controller; moon, academy crest, mushrooms, volt, tennis, wave; AOP checks, stars, footprints, orbit, cherries; skate bear, game controller, astronaut, shark, robot, basketball; race bib, bubble letters, racing 35, graffiti, varsity 23, Swiss poster.
+
+## Catalogue mix rule (founder)
+
+Each catalogue mixes print types: **letters only**, **objects** and **animals**. It doesn't have to be all toys or vehicles. Motifs from earlier proposals may be reused across the drop. Furry or character prints are not needed, but their ideas can be borrowed.

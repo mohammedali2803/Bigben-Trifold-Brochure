@@ -105,6 +105,42 @@ const blocks = ({ id }) => {
   ${[[92, 40, 9, yellow.hex], [222, 112, 8, tomato.hex], [40, 150, 7, green.hex]].map(([x, y, r, f]) => `<path d="${star(x, y, 5, r, r * 0.45)}" fill="${f}"/>`).join('')}`;
 };
 
+// 12. Yay! — foil balloon letters, letters only (chest) --------------------------
+const yay = ({ asset }) => `
+  ${toy(asset, 'yay', 10, 52, 220, 92)}
+  <text x="120" y="176" text-anchor="middle" font-family="Instrument Serif" font-style="italic" font-size="26" fill="#FFFFFF">it's summer!</text>
+  ${[[22, 46, 8, '#FFC23D'], [218, 40, 7, '#FF5FA2'], [206, 164, 6, '#3FD69A'], [30, 170, 5, '#3FA9FF']].map(([x, y, r, f]) => `<path d="${sparkle(x, y, r)}" fill="${f}"/>`).join('')}
+  ${dots([[60, 30, 2.5], [180, 26, 2], [120, 200, 2.5], [92, 196, 1.8], [150, 198, 1.8]], ['#FFFFFF', '#FFC23D', '#3FA9FF'])}`;
+
+// 13. Splash — toy whale with water spout (animal, full front) -----------------
+const splash = ({ asset }) => `
+  ${toy(asset, 'whale', 24, 40, 196, 166)}
+  ${[0, 1, 2].map((i) => `<path d="${wave(14 + i * 8, 226 - i * 8, 220 + i * 13, 4, 30, i * 1.3)}" fill="none" stroke="${i === 1 ? '#2F7BFF' : '#FFFFFF'}" stroke-width="5" stroke-linecap="round"/>`).join('')}
+  <text x="120" y="290" text-anchor="middle" font-family="Unbounded" font-weight="900" font-size="34" fill="${NAVY}" textLength="170" lengthAdjust="spacingAndGlyphs">SPLASH!</text>
+  ${[[30, 70, 7, '#FFFFFF'], [212, 52, 8, '#FFFFFF'], [208, 150, 5, '#2F7BFF']].map(([x, y, r, f]) => `<path d="${sparkle(x, y, r)}" fill="${f}"/>`).join('')}`;
+
+// 14. Play — chunky dimensional letters at the hem + small chest line (4-col screen)
+const play = ({ id }) => {
+  const C4 = ['#FF4B2B', '#FFC93C', '#2B6BFF', '#2DB46B'];
+  const letter = (ch, i) => {
+    const x = 8 + i * 57, y = 292 - (i % 2) * 10, rot = [-6, 4, -3, 6][i];
+    const glyph = (dx, dy, fill, extra = '') => `<text x="${x + dx}" y="${y + dy}" font-family="Rubik Mono One" font-size="74" fill="${fill}" ${extra}>${ch}</text>`;
+    const depth = Array.from({ length: 7 }, (_, k) => glyph(k + 1, k + 1, NAVY)).join('');
+    return `<g transform="rotate(${rot} ${x + 28} ${y - 26})">
+      ${depth}
+      <clipPath id="${id(`l${i}`)}">${glyph(0, 0, '#000')}</clipPath>
+      ${glyph(0, 0, C4[i])}
+      ${halftone({ x: x - 4, y: y - 64, w: 70, h: 70, cell: 4, fill: NAVY, clip: id(`l${i}`), tone: (px, py) => (py - (y - 22)) / 36 })}
+    </g>`;
+  };
+  return `
+  <circle cx="112" cy="62" r="5" fill="${C4[0]}"/><circle cx="124" cy="62" r="5" fill="${C4[1]}"/>
+  <text x="136" y="66" font-family="Space Mono" font-weight="700" font-size="10" fill="${NAVY}" letter-spacing="1.5">PLAY ALL DAY</text>
+  ${'PLAY'.split('').map(letter).join('')}
+  ${[[24, 196, 4, C4[2]], [92, 184, 3, C4[0]], [160, 198, 3.5, C4[3]], [214, 180, 3, C4[1]]].map(([x, y, r, f]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${f}"/>`).join('')}
+  ${[[56, 172, 7, C4[1]], [196, 206, 6, C4[2]]].map(([x, y, r, f]) => `<path d="${star(x, y, 5, r, r * 0.45)}" fill="${f}"/>`).join('')}`;
+};
+
 const item = (ref, name, colour, svg, inks) => ({ ref, name, colour, art: { front: { svg, size: SIZE, inks } } });
 
 export default {
@@ -112,16 +148,16 @@ export default {
   code: 'SUMMER · BOYS CORE · R/N H/S · KIDS 16–20 (1–3 YRS)',
   title: 'TOY BOX',
   technique: 'DIGITAL PRINT (DTF) + SCREEN',
-  subtitle: 'realistic toy prints · chest / hem / full front',
+  subtitle: 'letters · objects · animals · chest / hem / full front',
   layout: 'single',
   countInks: true,
   footer: 'Artboard = garment front panel, so each print sits where it prints (chest / hem / full).',
   items: [
-    item('TB-07', 'Rescue Squad', { name: 'Sky Blue', hex: '#A9D6F5' }, rescue, [FULL]),
+    item('TB-12', 'Yay!', { name: 'Navy', hex: '#1F2A44' }, yay, [FULL]),
     item('TB-08', 'Pool Party', { name: 'Mint', hex: '#BFE6D1' }, poolParty, [FULL]),
     item('TB-03', 'Block Party', { name: 'Off White', hex: '#F4EFE6' }, blocks, [INK.tomato, INK.blue, INK.yellow, INK.green]),
     item('TB-09', 'Chill Out', { name: 'Peach', hex: '#FFC8A8' }, chillOut, [FULL]),
-    item('TB-10', 'Zoom Zoom', { name: 'Lemon', hex: '#FFF0A8' }, zoom, [FULL]),
-    item('TB-11', 'Sky High', { name: 'Navy', hex: '#1F2A44' }, skyHigh, [FULL]),
+    item('TB-13', 'Splash', { name: 'Sky Blue', hex: '#A9D6F5' }, splash, [FULL]),
+    item('TB-14', 'Play', { name: 'Lemon', hex: '#FFF0A8' }, play, [INK.tomato, INK.yellow, INK.blue, { name: 'Navy', hex: NAVY }]),
   ],
 };
