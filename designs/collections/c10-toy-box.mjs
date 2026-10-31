@@ -207,7 +207,7 @@ const robot = ({ id }) => {
 
 const item = (ref, name, placement, colour, svg, inks) => ({
   ref, name: `${name}`, colour, placement,
-  art: { front: { svg, size: SIZE, inks, guide: frontGuide } },
+  art: { front: { svg, size: SIZE, inks } },
 });
 
 export default {
@@ -218,7 +218,7 @@ export default {
   subtitle: 'toy-like prints · chest / hem / full front',
   layout: 'single',
   countInks: true,
-  footer: 'Dashed line = garment front (placement guide only, not printed).',
+  footer: 'Artboard = garment front panel, so each print sits where it prints (chest / hem / full).',
   items: [
     item('TB-01', 'Beep Beep', 'chest', { name: 'Mint', hex: '#BFE6D1' }, truck, [INK.navy, INK.yellow, INK.tomato, INK.sky]),
     item('TB-02', 'Choo Choo', 'hem + chest', { name: 'Sky Blue', hex: '#A9D6F5' }, train, [INK.navy, INK.tomato, INK.yellow, INK.white]),
