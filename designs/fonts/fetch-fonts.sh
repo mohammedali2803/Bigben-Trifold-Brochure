@@ -10,6 +10,7 @@ FAMILIES=(
   "Space Mono:wght@400;700" "Sedgwick Ave Display" "Shrikhand" "Syne:wght@500;800" "Tilt Warp"
   "Yellowtail" "Caveat Brush" "Bungee" "Bungee Shade" "Righteous" "Rubik:wght@500;900"
   "Baloo 2:wght@800" "Yatra One" "Rozha One" "Teko:wght@600"
+  "UnifrakturMaguntia" "Pirata One" "Grenze Gotisch:wght@700;900" "Pinyon Script" "Mrs Saint Delafield"
 )
 : > fonts.css
 for fam in "${FAMILIES[@]}"; do

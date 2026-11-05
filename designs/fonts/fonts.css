@@ -273,3 +273,39 @@
   font-weight: 600;
   src: url(LYjYdG7kmE0gV69VVPPdFl06VN_JHLSy.ttf) format('truetype');
 }
+@font-face {
+  font-family: 'UnifrakturMaguntia';
+  font-style: normal;
+  font-weight: 400;
+  src: url(WWXPlieVYwiGNomYU-ciRLRvEmK7oaVunw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Pirata One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(I_urMpiDvgLdLh0fAtoftig.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Grenze Gotisch';
+  font-style: normal;
+  font-weight: 700;
+  src: url(Fh4hPjjqNDz1osh_jX9YfjudpBJBNV5y5wf_k1i5yDhUcA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Grenze Gotisch';
+  font-style: normal;
+  font-weight: 900;
+  src: url(Fh4hPjjqNDz1osh_jX9YfjudpBJBNV5y5wf_k1i5hjhUcA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Pinyon Script';
+  font-style: normal;
+  font-weight: 400;
+  src: url(6xKpdSJbL9-e9LuoeQiDRQR8aOI.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Mrs Saint Delafield';
+  font-style: normal;
+  font-weight: 400;
+  src: url(v6-IGZDIOVXH9xtmTZfRagunqBw5WC62cK4.ttf) format('truetype');
+}

@@ -96,3 +96,8 @@ Several tech packs use protected names or characters. These are a legal risk on 
   - realistic textures
 - Objects and vehicles render best. Furry or expressive characters (lion, octopus) need an illustrator or licensed artwork.
 - Realistic prints go to DTF / digital print. A 4-ink version needs index separation; check with the printer.
+
+## 8. Founder rules on wording and realism
+
+- **No dates or years in any print**, including "EST. …", "since …" and day/month stamps.
+- **Realistic only.** Before building a full catalogue, make one sample print and get approval. Realistic textures come from `textures/*.py` (marble pour, flames) and `lib/ornament.mjs` (carpet, bandana, lace ornament, plus torn and worn filters).
