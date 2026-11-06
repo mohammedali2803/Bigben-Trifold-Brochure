@@ -558,6 +558,64 @@ const SCENES = {
     return { scene, camera };
   },
 
+  // Row of toy astronauts along the hem with moon, flag, satellite and a small planet.
+  async astrocrew(renderer) {
+    const scene = toyStage(renderer);
+    const suit = new THREE.MeshPhysicalMaterial({ color: 0xf2f2ee, roughness: 0.55, clearcoat: 0.3 });
+    const grey = new THREE.MeshPhysicalMaterial({ color: 0xc9ccd2, roughness: 0.6 });
+    const visor = new THREE.MeshPhysicalMaterial({ color: 0x0f1a3a, metalness: 0.6, roughness: 0.05, clearcoat: 1 });
+    const g = new THREE.Group();
+    const cap = (r, l, mat) => new THREE.Mesh(new THREE.CapsuleGeometry(r, l, 12, 32), mat);
+    const astronaut = (accent, pose) => {
+      const a = new THREE.Group();
+      const body = cap(0.42, 0.45, suit); body.position.y = 0.95; a.add(body);
+      const pack = new THREE.Mesh(new RoundedBoxGeometry(0.62, 0.7, 0.32, 6, 0.1), grey); pack.position.set(0, 1.02, -0.38); a.add(pack);
+      const panel = new THREE.Mesh(new RoundedBoxGeometry(0.34, 0.22, 0.08, 4, 0.03), grey); panel.position.set(0, 1.0, 0.4); a.add(panel);
+      [[-0.08, 0xff4b3b], [0.06, accent]].forEach(([x, c]) => { const b = new THREE.Mesh(new THREE.SphereGeometry(0.04, 16, 12), glossy(c)); b.position.set(x, 1.02, 0.45); a.add(b); });
+      const stripe = new THREE.Mesh(new THREE.TorusGeometry(0.43, 0.035, 12, 48), glossy(accent)); stripe.rotation.x = Math.PI / 2; stripe.position.y = 0.72; a.add(stripe);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.62, 64, 48), suit); head.position.y = 1.85; a.add(head);
+      const v = new THREE.Mesh(new THREE.SphereGeometry(0.46, 64, 48), visor); v.scale.set(1, 0.8, 0.5); v.position.set(0, 1.86, 0.43); a.add(v);
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(0.46, 0.035, 16, 64), grey); rim.scale.set(1, 0.8, 1); rim.position.set(0, 1.86, 0.45); a.add(rim);
+      const shine = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 12), new THREE.MeshBasicMaterial({ color: 0xffffff })); shine.scale.set(1.6, 0.6, 0.3); shine.position.set(-0.18, 2.0, 0.66); a.add(shine);
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.07, 16, 48), grey); ring.rotation.x = Math.PI / 2; ring.position.y = 1.34; a.add(ring);
+      const limb = (x, y, rz, rx, len, boot) => { const l = new THREE.Group(); const c = cap(0.16, len, suit); c.position.y = -len / 2 - 0.08; l.add(c);
+        const e = new THREE.Mesh(new THREE.SphereGeometry(boot ? 0.22 : 0.18, 24, 16), boot ? grey : suit); e.scale.set(1, boot ? 0.75 : 1, boot ? 1.3 : 1); e.position.set(0, -len - 0.2, boot ? 0.06 : 0); l.add(e);
+        l.position.set(x, y, 0); l.rotation.set(rx, 0, rz); a.add(l); return l; };
+      const [la, ra, ll, rl] = pose;
+      limb(-0.5, 1.2, la, 0, 0.35); limb(0.5, 1.2, ra, 0, 0.35);
+      limb(-0.2, 0.62, ll, 0, 0.3, true); limb(0.2, 0.62, rl, 0, 0.3, true);
+      return a;
+    };
+    const crew = [
+      [0xff7a1a, [-0.5, 0.4, -0.15, 0.25], -3.3, 0.2, 0.25, 0.1],
+      [0x2f7bff, [-2.4, 0.5, 0.35, -0.5], -1.15, 0.45, -0.1, -0.12],
+      [0xffc915, [-0.3, 2.6, 0.0, 0.0], 1.05, 0.0, 0.2, 0.06],
+      [0x35d46a, [-2.6, -0.4, 0.2, -0.2], 3.15, 0.25, -0.3, -0.08],
+    ];
+    crew.forEach(([c, pose, x, y, ry, rz]) => { const a = astronaut(c, pose); a.position.set(x, y, 0); a.rotation.set(0, ry, rz); g.add(a); });
+    // flag held by the third astronaut
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 2.6, 12), metal(0x9aa3b5)); pole.position.set(2.05, 1.6, 0.1); pole.rotation.z = -0.15; g.add(pole);
+    const flag = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.55, 12, 4), new THREE.MeshPhysicalMaterial({ color: 0xe5322d, side: THREE.DoubleSide, roughness: 0.7 }));
+    const fp = flag.geometry.attributes.position; for (let i = 0; i < fp.count; i++) fp.setZ(i, Math.sin(fp.getX(i) * 6) * 0.05); flag.geometry.computeVertexNormals();
+    flag.position.set(2.65, 2.62, 0.1); flag.rotation.z = -0.15; g.add(flag);
+    // moon with craters behind the fourth astronaut
+    const moon = new THREE.Mesh(new THREE.SphereGeometry(1.15, 64, 48), new THREE.MeshPhysicalMaterial({ color: 0xffd23f, roughness: 0.8 }));
+    moon.position.set(3.4, 2.1, -1.6); g.add(moon);
+    const R = rng(4); for (let i = 0; i < 9; i++) { const cr = new THREE.Mesh(new THREE.SphereGeometry(0.12 + R() * 0.18, 24, 16), new THREE.MeshPhysicalMaterial({ color: 0xe0b52a, roughness: 0.9 })); const th = R() * 6.28, ph = 0.5 + R() * 1.6; cr.position.set(3.4 + 1.1 * Math.sin(ph) * Math.cos(th), 2.1 + 1.1 * Math.cos(ph), -1.6 + Math.abs(1.1 * Math.sin(ph) * Math.sin(th))); cr.scale.set(1, 1, 0.4); cr.lookAt(3.4, 2.1, -1.6); g.add(cr); }
+    // small purple planet + satellite
+    const pl = new THREE.Mesh(new THREE.SphereGeometry(0.42, 48, 32), new THREE.MeshPhysicalMaterial({ color: 0xb79cff, roughness: 0.6 })); pl.position.set(0.1, 3.7, -0.5); g.add(pl);
+    for (let i = 0; i < 4; i++) { const cr = new THREE.Mesh(new THREE.SphereGeometry(0.07 + R() * 0.05, 16, 12), new THREE.MeshPhysicalMaterial({ color: 0x8a6fd6 })); cr.position.set(0.1 + (R() - 0.5) * 0.5, 3.7 + (R() - 0.5) * 0.5, -0.12); cr.scale.z = 0.4; g.add(cr); }
+    const sat = new THREE.Group();
+    sat.add(new THREE.Mesh(new RoundedBoxGeometry(0.4, 0.4, 0.5, 4, 0.06), metal(0xd8b25a)));
+    const panelMat = new THREE.MeshPhysicalMaterial({ color: 0x24407a, metalness: 0.5, roughness: 0.3 });
+    [-1, 1].forEach((d) => { const p = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.36, 0.03), panelMat); p.position.x = d * 0.7; sat.add(p);
+      for (let k = 1; k < 4; k++) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.015, 0.37, 0.04), metal(0xcfd5df)); l.position.set(d * 0.7 + (k - 2) * 0.22, 0, 0); sat.add(l); } });
+    const dish = new THREE.Mesh(new THREE.SphereGeometry(0.2, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2.4), metal(0xe4e7ec)); dish.position.y = 0.3; sat.add(dish);
+    sat.position.set(-1.9, 3.3, -0.3); sat.rotation.set(0.3, 0.4, -0.5); g.add(sat);
+    scene.add(g);
+    return shot(scene, g, [0, 1.2, 12], 0.98);
+  },
+
   // Two glossy dice mid-roll.
   async dice(renderer) {
     const scene = new THREE.Scene();
