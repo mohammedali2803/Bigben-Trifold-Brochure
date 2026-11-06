@@ -482,6 +482,82 @@ const SCENES = {
     return shot(scene, g, [0.4, 0.4, 9], 0.93);
   },
 
+  // Weathered concrete apartment block at night, one warm lit window.
+  async panelblock(renderer) {
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+    const scene = new THREE.Scene();
+    const noise = createNoise2D(rng(17));
+    const fbm = (x, y) => { let v = 0, a = 0.5, f = 1; for (let o = 0; o < 6; o++) { v += a * noise(x * f, y * f); f *= 2; a *= 0.5; } return v; };
+    const concrete = (W, H, cols, rows, tone, seed) => {
+      const c = Object.assign(document.createElement('canvas'), { width: W, height: H }); const x = c.getContext('2d');
+      const img = x.createImageData(W, H), R = rng(seed);
+      const drips = Array.from({ length: 90 }, () => [R() * W, R() * H * 0.6, 2 + R() * 6, H * (0.15 + R() * 0.6), 0.25 + R() * 0.4]);
+      for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
+        let v = tone + fbm(i / 140 + seed, j / 140) * 38 + fbm(i / 18, j / 18 + seed) * 14 + (R() - 0.5) * 22;
+        const stain = fbm(i / 260 + 9, j / 90 + seed); if (stain > 0.15) v -= (stain - 0.15) * 160;
+        for (const [dx, dy, dw, dl, da] of drips) if (Math.abs(i - dx - Math.sin(j / 40) * 2) < dw && j > dy && j < dy + dl) v -= 40 * da * (1 - (j - dy) / dl);
+        if (j % Math.floor(H / rows) < 3 || i % Math.floor(W / cols) < 3) v -= 30;
+        const o = (j * W + i) * 4; v = Math.max(8, Math.min(200, v));
+        img.data[o] = v * 0.96; img.data[o + 1] = v * 0.98; img.data[o + 2] = v; img.data[o + 3] = 255;
+      }
+      x.putImageData(img, 0, 0);
+      const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+    };
+    const litTex = (() => {
+      const c = Object.assign(document.createElement('canvas'), { width: 256, height: 320 }); const x = c.getContext('2d');
+      const g = x.createRadialGradient(150, 120, 10, 128, 160, 220); g.addColorStop(0, '#ffd27a'); g.addColorStop(0.5, '#ff9a2e'); g.addColorStop(1, '#b4480f');
+      x.fillStyle = g; x.fillRect(0, 0, 256, 320);
+      x.fillStyle = '#3a1606';
+      x.beginPath(); x.arc(92, 150, 26, 0, Math.PI * 2); x.fill();                       // head
+      x.beginPath(); x.ellipse(92, 128, 34, 12, 0, Math.PI, 0); x.lineWidth = 9; x.strokeStyle = '#3a1606'; x.stroke(); // headphones band
+      x.fillRect(58, 142, 12, 24); x.fillRect(114, 142, 12, 24);
+      x.beginPath(); x.moveTo(40, 320); x.quadraticCurveTo(50, 190, 92, 182); x.quadraticCurveTo(134, 190, 146, 320); x.fill(); // shoulders
+      x.fillRect(150, 230, 100, 10); x.fillRect(176, 190, 56, 40);                           // desk + monitor
+      x.fillStyle = '#fff0c8'; x.fillRect(180, 194, 48, 32);
+      x.fillStyle = '#3a1606'; x.fillRect(0, 0, 256, 8); x.fillRect(124, 0, 8, 320); x.fillRect(0, 150, 256, 6); // frame mullions
+      const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+    })();
+    const g = new THREE.Group();
+    const block = (w, h, d, cols, rows, tone, seed, x, z, litAt) => {
+      const tex = concrete(512, Math.round(512 * h / w), cols, rows, tone, seed);
+      const mat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95 });
+      const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); b.position.set(x, h / 2, z); g.add(b);
+      const ww = (w / cols) * 0.5, wh = (h / rows) * 0.56, glass = new THREE.MeshStandardMaterial({ color: 0x0b0d12, roughness: 0.25, metalness: 0.3 });
+      const frame = new THREE.MeshStandardMaterial({ color: 0x55534f, roughness: 0.9 });
+      for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+        const cx = x - w / 2 + (c + 0.5) * (w / cols), cy = (r + 0.5) * (h / rows), lit = litAt && litAt[0] === c && litAt[1] === r;
+        const f = new THREE.Mesh(new THREE.BoxGeometry(ww * 1.12, wh * 1.12, 0.03), frame); f.position.set(cx, cy, z + d / 2 + 0.005); g.add(f);
+        const pane = new THREE.Mesh(new THREE.PlaneGeometry(ww, wh), lit ? new THREE.MeshBasicMaterial({ map: litTex }) : glass);
+        pane.position.set(cx, cy, z + d / 2 + 0.025); g.add(pane);
+        if (!lit) {
+          const m1 = new THREE.Mesh(new THREE.BoxGeometry(ww * 0.05, wh, 0.02), frame); m1.position.set(cx + ww * 0.1, cy, z + d / 2 + 0.035); g.add(m1);
+          const m2 = new THREE.Mesh(new THREE.BoxGeometry(ww, wh * 0.05, 0.02), frame); m2.position.set(cx, cy + wh * 0.22, z + d / 2 + 0.035); g.add(m2);
+          if ((r * 5 + c) % 4 === 0) { const cur = new THREE.Mesh(new THREE.PlaneGeometry(ww * 0.35, wh * 0.9), new THREE.MeshStandardMaterial({ color: 0x2a2c30, roughness: 1 })); cur.position.set(cx - ww * 0.3, cy, z + d / 2 + 0.03); g.add(cur); }
+        } else {
+          const halo = new THREE.Mesh(new THREE.PlaneGeometry(ww * 2.4, wh * 2.2), new THREE.MeshBasicMaterial({ color: 0xff8a2a, transparent: true, opacity: 0.18, depthWrite: false }));
+          halo.position.set(cx, cy, z + d / 2 + 0.02); g.add(halo);
+        }
+        if ((r + c * 2) % 5 === 1 && r > 0) { const bal = new THREE.Mesh(new THREE.BoxGeometry(ww * 1.6, wh * 0.4, 0.35), mat); bal.position.set(cx, cy - wh * 0.62, z + d / 2 + 0.17); g.add(bal); }
+        if (lit) { const pl = new THREE.PointLight(0xff9a3c, 3.5, 1.6, 2); pl.position.set(cx, cy, z + d / 2 + 0.6); g.add(pl); }
+        if ((r * 7 + c * 3) % 11 === 4) { const ac = new THREE.Mesh(new THREE.BoxGeometry(ww * 0.6, wh * 0.35, 0.22), frame); ac.position.set(cx + ww * 0.55, cy - wh * 0.15, z + d / 2 + 0.11); g.add(ac); }
+      }
+    };
+    block(4.2, 5.4, 2.4, 5, 7, 104, 3, 0.9, 0, [2, 4]);
+    const roof = new THREE.MeshStandardMaterial({ color: 0x3a3b3e, roughness: 1 });
+    const par = new THREE.Mesh(new THREE.BoxGeometry(4.3, 0.18, 2.5), roof); par.position.set(0.9, 5.49, 0); g.add(par);
+    const hut = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.6, 0.8), roof); hut.position.set(1.9, 5.8, -0.3); g.add(hut);
+    [[-0.4, 0.9], [0.3, 1.3]].forEach(([x, hgt]) => { const a = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, hgt, 6), roof); a.position.set(x, 5.5 + hgt / 2, 0.2); g.add(a); const bar = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.015, 0.015), roof); bar.position.set(x, 5.5 + hgt * 0.85, 0.2); g.add(bar); });
+    block(3.2, 3.6, 2.0, 4, 5, 72, 8, -2.6, -0.9, null);
+    scene.add(g);
+    scene.add(new THREE.HemisphereLight(0x8090b0, 0x050505, 0.5));
+    const moon = new THREE.DirectionalLight(0xb8c4e0, 1.1); moon.position.set(-4, 7, 6); scene.add(moon);
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+    camera.position.set(-1.2, 2.2, 9.5);
+    frame(camera, g, 0.97);
+    camera.position.set(camera.position.x - 1.5, 0.6, camera.position.z); camera.lookAt(-0.2, 3.0, 0);
+    return { scene, camera };
+  },
+
   // Two glossy dice mid-roll.
   async dice(renderer) {
     const scene = new THREE.Scene();
