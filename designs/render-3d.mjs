@@ -12,9 +12,14 @@ mkdirSync(out, { recursive: true });
 const wanted = process.argv.slice(2);
 const ctx = await openBrowser();
 try {
-  for (const scene of SCENES.filter((s) => !wanted.length || wanted.includes(s))) {
+  // Plain names render fixed scenes; "outname:scene?k=v&k=v" renders a parametric scene.
+  const jobs = wanted.length ? wanted : SCENES;
+  for (const job of jobs) {
+    const [outName, spec] = job.includes(':') ? job.split(/:(.*)/s) : [job, job];
+    const [sceneName, query = ''] = spec.split('?');
+    const scene = outName;
     const page = await ctx.page({ width: SIZE, height: SIZE });
-    await page.goto(`${ctx.base}/3d/render.html?scene=${scene}&size=${SIZE}`);
+    await page.goto(`${ctx.base}/3d/render.html?scene=${sceneName}&size=${SIZE}&${query}`);
     await page.waitForFunction(() => window.renderDone || window.renderError, null, { timeout: 300000 });
     const err = await page.evaluate(() => window.renderError);
     if (err) throw new Error(`${scene}: ${err}`);

@@ -12,6 +12,8 @@ const params = new URLSearchParams(location.search);
 const SIZE = Number(params.get('size') ?? 2000);
 const FONTS = {
   bagel: '/fonts/hYkPPucsQOr5dy02WmQr5Zkd0B4.ttf',
+  archivo: '/fonts/k3k6o8UDI-1M0wlSV9XAw6lQkqWY8Q82sJaRE-NWIDdgffTTnTRp8A.ttf',
+  rubik: '/fonts/UqyJK8kPP3hjw6ANTdfRk9YSN-8w.ttf',
   unbounded900: '/fonts/Yq6F-LOTXCb04q32xlpat-6uR42XTqtG67H2040.ttf',
 };
 
@@ -383,6 +385,101 @@ const SCENES = {
     camera.position.set(0.3, -0.4, 8);
     frame(camera, group, 0.95);
     return { scene, camera };
+  },
+
+  // Parametric word: ?text=LINE1|LINE2&colors=hex,hex&mat=puff|gloss|chrome&font=bagel&per=letter|line
+  async word(renderer) {
+    const mat = params.get('mat') ?? 'gloss';
+    const scene = mat === 'chrome' ? new THREE.Scene() : toyStage(renderer);
+    if (mat === 'chrome') scene.environment = chromeEnv(renderer);
+    if (mat === 'puff') { scene.environment = studioEnv(renderer); }
+    const font = await loadFont(params.get('font') ?? 'bagel');
+    const cols = (params.get('colors') ?? 'ffffff').split(',').map((c) => parseInt(c, 16));
+    const per = params.get('per') ?? 'line';
+    const material = (c) => mat === 'chrome' ? new THREE.MeshPhysicalMaterial({ color: c, metalness: 1, roughness: 0.05 })
+      : mat === 'puff' ? new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.92, sheen: 1, sheenRoughness: 0.8, sheenColor: 0xffffff })
+      : glossy(c);
+    const bevel = mat === 'puff' ? { depth: 0.16, bevelThickness: 0.22, bevelSize: 0.07, bevelSegments: 18, curveSegments: 28 }
+      : { depth: 0.3, bevelThickness: 0.28, bevelSize: 0.11, bevelSegments: 18, curveSegments: 28 };
+    const group = new THREE.Group();
+    const lines = (params.get('text') ?? 'WORD').split('|');
+    let k = 0;
+    lines.forEach((ln, li) => {
+      const row = new THREE.Group(); let x = 0;
+      ln.split('').forEach((ch) => {
+        if (ch === ' ') { x += 0.45; return; }
+        const m = textMesh(font, ch, material(cols[(per === 'letter' ? k : li) % cols.length]), bevel);
+        const w = m.geometry.boundingBox.max.x - m.geometry.boundingBox.min.x;
+        m.position.x = x + w / 2; m.rotation.z = per === 'letter' ? ((k % 3) - 1) * 0.05 : 0;
+        x += w + 0.04; k++; row.add(m);
+      });
+      row.position.set(-x / 2, -li * 1.15, 0);
+      group.add(row);
+    });
+    group.rotation.set(-0.12, Number(params.get('ry') ?? 0.12), Number(params.get('rz') ?? 0.03));
+    scene.add(group);
+    if (mat === 'puff') { const l = new THREE.DirectionalLight(0xffffff, 1.3); l.position.set(-3, 6, 5); scene.add(l); }
+    const camera = new THREE.PerspectiveCamera(24, 1, 0.1, 100);
+    camera.position.set(0, 0.3, 8);
+    frame(camera, group, 0.96);
+    return { scene, camera };
+  },
+
+  // Keychain bundle: ?v=1|2
+  async keychain(renderer) {
+    const scene = toyStage(renderer);
+    const v = params.get('v') ?? '1';
+    const steel = metal(0xd9dde3), font = await loadFont('archivo');
+    const g = new THREE.Group();
+    const add = (m, x, y, z = 0, rx = 0, ry = 0, rz = 0) => { m.position.set(x, y, z); m.rotation.set(rx, ry, rz); g.add(m); return m; };
+    const clipCol = v === '1' ? 0x2f5bff : 0xff5a1f;
+    const clip = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.07, 24, 96, Math.PI * 1.9), glossy(clipCol, { metalness: 0.4 }));
+    clip.scale.set(0.62, 1.15, 1); add(clip, 0.55, 2.45, 0, 0, 0, 0.5);
+    add(new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.045, 20, 80), steel), 0.15, 1.55, 0, 0.3, 0.6, 0);
+    const chain = (x0, y0, x1, y1) => { const n = Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 0.11); for (let i = 0; i < n; i++) { const t = (i + 0.5) / n; add(new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.022, 12, 32), steel), x0 + (x1 - x0) * t, y0 + (y1 - y0) * t, 0, 0, i % 2 ? Math.PI / 2 : 0, 0); } };
+    // Tag with text
+    const tagShape = new THREE.Shape(); [[0, 1.3], [0.45, 1.0], [0.45, -1.0], [0, -1.3], [-0.45, -1.0], [-0.45, 1.0]].forEach(([x, y], i) => i ? tagShape.lineTo(x, y) : tagShape.moveTo(x, y));
+    const tag = new THREE.Mesh(new THREE.ExtrudeGeometry(tagShape, { depth: 0.1, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 6 }), glossy(v === '1' ? 0xd7ff3b : 0x3fd6c6));
+    const tagG = new THREE.Group(); tagG.add(tag);
+    const words = v === '1' ? ['SCHOOL', "IS OUT"] : ['GAME', 'ROOM'];
+    words.forEach((w, i) => { const t = textMesh(font, w, glossy(0x1c2340), { size: 0.17, depth: 0.03, bevelThickness: 0.01, bevelSize: 0.005, bevelSegments: 2 }); t.rotation.z = Math.PI / 2; t.position.set(-0.1 + i * 0.26, 0, 0.17); tagG.add(t); });
+    tagG.position.set(-0.75, -0.05, 0); tagG.rotation.z = 0.42; g.add(tagG);
+    chain(0.0, 1.3, -0.45, 1.05, 4);
+    // Key
+    const key = new THREE.Group();
+    key.add(new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.07, 24, 64), steel));
+    const blade = new THREE.Mesh(new RoundedBoxGeometry(0.13, 1.0, 0.05, 2, 0.02), steel); blade.position.y = -0.65; key.add(blade);
+    [-0.5, -0.75, -0.95].forEach((y) => { const t = new THREE.Mesh(new RoundedBoxGeometry(0.1, 0.07, 0.05, 2, 0.01), steel); t.position.set(0.1, y, 0); key.add(t); });
+    key.position.set(0.35, 0.95, 0.1); key.rotation.z = -0.15; g.add(key);
+    // Charms
+    if (v === '1') {
+      const ball = new THREE.Mesh(new THREE.SphereGeometry(0.36, 64, 48), glossy(0xc8102e, { roughness: 0.3 }));
+      add(ball, 1.25, 0.55, 0.1); add(new THREE.Mesh(new THREE.TorusGeometry(0.36, 0.018, 12, 80), glossy(0xfff1d6)), 1.25, 0.55, 0.1, 0.2, 1.2, 0);
+      chain(0.35, 1.4, 1.2, 0.92, 5);
+      const st = new THREE.Shape(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 0.17 : 0.4, a = (i * Math.PI) / 5 + Math.PI / 2; i ? st.lineTo(r * Math.cos(a), r * Math.sin(a)) : st.moveTo(r * Math.cos(a), r * Math.sin(a)); }
+      add(new THREE.Mesh(new THREE.ExtrudeGeometry(st, { depth: 0.1, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.05, bevelSegments: 8 }), glossy(0xffc915)), 1.55, 1.55, 0, 0, 0, 0.3);
+      chain(0.4, 1.55, 1.25, 1.58, 4);
+      const sneaker = new THREE.Group();
+      sneaker.add(new THREE.Mesh(new RoundedBoxGeometry(0.9, 0.34, 0.36, 6, 0.14), glossy(0xffffff)));
+      const sole = new THREE.Mesh(new RoundedBoxGeometry(0.96, 0.1, 0.4, 4, 0.04), glossy(0xff5a1f)); sole.position.y = -0.2; sneaker.add(sole);
+      const top = new THREE.Mesh(new RoundedBoxGeometry(0.42, 0.28, 0.34, 6, 0.12), glossy(0xffffff)); top.position.set(-0.2, 0.22, 0); sneaker.add(top);
+      sneaker.position.set(-0.35, -1.75, 0.1); sneaker.rotation.set(0.2, -0.4, -0.3); g.add(sneaker);
+      chain(-0.75, -1.4, -0.45, -1.55, 3);
+    } else {
+      const pad = new THREE.Group();
+      pad.add(new THREE.Mesh(new RoundedBoxGeometry(0.95, 0.5, 0.2, 8, 0.2), glossy(0x8b5cff)));
+      [[-0.25, 0.05], [0.25, 0.05]].forEach(([x, y], i) => { const b = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.08, 24), glossy(i ? 0xff3e9a : 0xd7ff3b)); b.rotation.x = Math.PI / 2; b.position.set(x, y, 0.12); pad.add(b); });
+      pad.position.set(1.25, 0.55, 0.1); pad.rotation.z = -0.25; g.add(pad); chain(0.35, 1.4, 1.2, 0.85, 5);
+      const dieM = new THREE.Mesh(new RoundedBoxGeometry(0.5, 0.5, 0.5, 6, 0.1), glossy(0xffffff));
+      add(dieM, 1.5, 1.6, 0, 0.5, 0.6, 0.2);
+      [[0, 0], [-0.12, 0.12], [0.12, -0.12]].forEach(([x, y]) => { const pip = new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 12), glossy(0x111111)); pip.position.set(x, y, 0.25); dieM.add(pip); });
+      chain(0.4, 1.55, 1.25, 1.6, 4);
+      const hs = new THREE.Shape(); hs.moveTo(0, -0.35); hs.bezierCurveTo(-0.6, 0.0, -0.3, 0.45, 0, 0.2); hs.bezierCurveTo(0.3, 0.45, 0.6, 0.0, 0, -0.35);
+      add(new THREE.Mesh(new THREE.ExtrudeGeometry(hs, { depth: 0.1, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.05, bevelSegments: 8 }), glossy(0xff3b4f)), -0.4, -1.7, 0.1, 0, 0, -0.2);
+      chain(-0.75, -1.4, -0.45, -1.5, 3);
+    }
+    scene.add(g);
+    return shot(scene, g, [0.4, 0.4, 9], 0.93);
   },
 
   // Two glossy dice mid-roll.

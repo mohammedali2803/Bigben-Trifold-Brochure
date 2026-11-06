@@ -82,7 +82,7 @@ function sheetHtml(collection, ctx) {
     h1 { font-family: 'Unbounded'; font-weight: 900; font-size: 54px; line-height: 1; margin: 6px 0 0; letter-spacing: -1px; }
     .meta { text-align: right; font-size: 13px; line-height: 1.6; }
     .pill { display: inline-block; background: #151515; color: #F3F1EC; padding: 6px 14px; border-radius: 99px; font-weight: 700; letter-spacing: 1px; font-size: 13px; }
-    .grid { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 22px 26px; margin-top: 22px; }
+    .grid { flex: 1; display: grid; grid-template-columns: repeat(${collection.cols ?? 3}, 1fr); grid-template-rows: repeat(2, 1fr); gap: 22px 26px; margin-top: 22px; }
     figure { margin: 0; display: flex; flex-direction: column; min-height: 0; }
     .swatch { flex: 1; background: var(--bg); border-radius: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 0; position: relative; }
     .art.single { height: 86%; aspect-ratio: 1; }
