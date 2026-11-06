@@ -274,6 +274,30 @@
   src: url(LYjYdG7kmE0gV69VVPPdFl06VN_JHLSy.ttf) format('truetype');
 }
 @font-face {
+  font-family: 'Londrina Solid';
+  font-style: normal;
+  font-weight: 900;
+  src: url(flUiRq6sw40kQEJxWNgkLuudGfvdDzY0.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Rubik Dirt';
+  font-style: normal;
+  font-weight: 400;
+  src: url(DtVmJxC7WLEj1uIXEWAdulw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Lilita One';
+  font-style: normal;
+  font-weight: 400;
+  src: url(i7dPIFZ9Zz-WBtRtedDbUEY.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Gochi Hand';
+  font-style: normal;
+  font-weight: 400;
+  src: url(hES06XlsOjtJsgCkx1PkTo4.ttf) format('truetype');
+}
+@font-face {
   font-family: 'UnifrakturMaguntia';
   font-style: normal;
   font-weight: 400;
